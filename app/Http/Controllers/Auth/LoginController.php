@@ -7,25 +7,32 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Resources\AuthResource;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
 
 class LoginController extends Controller
 {
+    public function __construct(
+        protected readonly AuthService $authService
+    )
+    {
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function __invoke(LoginRequest $loginRequest)
     {
-        try {
-            $user = User::query()->where('email', '=', $loginRequest->email)->firstOrFail();
-            $token = $user->createToken('my_api_token')->plainTextToken;
-            return response([
-                'data' => AuthResource::make(['user' => $user,'token'=>$token]),
-                'success' => UserResponseEnum::USER_REGISTER,
-            ]);
-        } catch (Exception $exception) {
-            return response([
-                'message' => $exception->getMessage(),
-                'success' => false
-            ]);
-        }
+        $token = $this->authService->login(
+            $loginRequest->get('email'),
+            $loginRequest->get('password')
+        );
+
+        return response([
+            'data' => AuthResource::make(['user' => auth()->user(), 'token' => $token]),
+            'message' => UserResponseEnum::USER_REGISTER,
+            'success' => true
+        ]);
     }
 }

@@ -8,32 +8,30 @@ use App\Http\Requests\User\RegisterRequest;
 use App\Http\Resources\AuthResource;
 use App\Mail\User\PasswordMail;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use PHPUnit\Exception;
 
 class RegisterController extends Controller
 {
+    public function __construct(protected readonly AuthService $authService)
+    {
+
+    }
+/**
+ *@throws  \Exception
+ */
     public function __invoke(RegisterRequest $registerRequest)
     {
-        try {
-            $user = User::query()->create([
-                'name' => $registerRequest['name'],
-                'email' => $registerRequest['email'],
-                'password' => bcrypt($registerRequest['password']),
-            ]);
-            $password = Str::random(10);
-            Mail::to($user['email'])->send(new PasswordMail($password));
-
-            return response([
-                'data' => AuthResource::make(['user' => $user]),
-                'success' => UserResponseEnum::USER_REGISTER,
-            ]);
-        } catch (\Exception $exception) {
-            return response([
-                'message' => $exception->getMessage(),
-                'success' => false
-            ]);
-        }
+        $user = $this->authService->register(
+            $registerRequest->get('name'),
+            $registerRequest->get('email')
+        );
+        return response([
+            'data' => AuthResource::make(['user' => $user]),
+            'message' => UserResponseEnum::USER_REGISTER,
+            'success' => true,
+        ]);
     }
 }

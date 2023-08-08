@@ -14,10 +14,14 @@ class AuthResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $response = [
             'user' => UserResource::make($this['user']),
-            'token_type' => 'Bearer',
-            'token'=>$this['token'],
         ];
+
+        if (isset($this['token'])) {
+            $response['token'] = $this['token'];
+        }
+
+        return $response;
     }
 }
