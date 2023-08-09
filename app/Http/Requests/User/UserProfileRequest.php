@@ -3,9 +3,8 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ForgotPasswordRequest extends FormRequest
+class UserProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +22,9 @@ class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'max:255', Rule::exists('users', 'email')],
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'media' => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
         ];
     }
 }

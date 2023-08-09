@@ -4,6 +4,8 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\User\ChangeUserPasswordController;
+use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
-//        Route::post()
+        Route::post('userProfileUpdate', UserProfileController::class);
+        Route::post('changeUserPassword', ChangeUserPasswordController::class);
     });
 
 

@@ -12,5 +12,6 @@ enum UserResponseEnum:string
     case USER_REGISTER = "User registered";
     case USER_LOGIN = "User login";
     case USER_PASSWORD_NEW = "User password new";
+    case USER_PASSWORD_CHANGE = "User password change";
     case ERROR = "Something went wrong, check Logs!";
 }

@@ -24,7 +24,7 @@ class ForgotPasswordController extends Controller
         );
         return response([
             'data' => UserResource::make($user),
-            'message' => [UserResponseEnum::USER_PASSWORD_NEW, 'User successfully logout'],
+            'message' => UserResponseEnum::USER_PASSWORD_NEW,
             'success' => true,
         ]);
    }
