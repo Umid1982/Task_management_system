@@ -22,10 +22,18 @@ class ChangeUserPasswordController extends Controller
             $changePasswordRequest->get('password'),
             $changePasswordRequest->get('new_password'),
         );
+
+        if($changeOldPassword) {
+            return response([
+                'data' => UserResource::make($changeOldPassword),
+                'message' => UserResponseEnum::USER_PASSWORD_CHANGE,
+                'success' => true,
+            ]);
+        };
+
         return response([
-            'data' => UserResource::make($changeOldPassword),
-            'message'=>UserResponseEnum::USER_PASSWORD_CHANGE,
-            'success'=>true,
+            'message' => 'Password incorrect!',
+            'success' => false
         ]);
     }
 }

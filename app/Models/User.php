@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail,HasMedia
+class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +45,20 @@ class User extends Authenticatable implements MustVerifyEmail,HasMedia
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_users', 'user_id', 'team_id');
+    }
+
+    public function userTeams()
+    {
+        return $this->hasMany(Team::class,'user_id','id');
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_users', 'user_id', 'task_id');
+    }
 
 }

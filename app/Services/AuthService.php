@@ -53,7 +53,7 @@ class AuthService
         return $user;
     }
 
-    public function forgotPassword($email): User
+    public function  forgotPassword(string $email): User
     {
         /** @var User $user */
         $password = Str::random(8);
