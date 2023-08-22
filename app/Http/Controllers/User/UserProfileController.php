@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Console\Constants\ResponseConstants\UserResponseEnum;
-use App\Http\Controllers\Controller;
+
 use App\Http\Requests\User\UserProfileRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Services\UserProfileService;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileController extends Controller

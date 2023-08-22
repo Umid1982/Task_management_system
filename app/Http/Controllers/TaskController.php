@@ -56,11 +56,18 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        if (auth()->user()->hasPermissionTo('show')){
+            return response([
+                'data' => TaskResource::make($task),
+                'message' => TaskResponseEnum::TASK_SHOW,
+                'success' => true
+            ]);
+        }
         return response([
-            'data' => TaskResource::make($task),
-            'message' => TaskResponseEnum::TASK_SHOW,
-            'success' => true
+            'message' => TaskResponseEnum::ERROR,
+            'success' => false
         ]);
+
     }
 
     /**

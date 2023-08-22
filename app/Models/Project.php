@@ -15,4 +15,9 @@ class Project extends Model
         'status_date',
         'team_id'
     ];
+
+    public function teamUser()
+    {
+        return $this->belongsTo(Team::class);
+    }
 }

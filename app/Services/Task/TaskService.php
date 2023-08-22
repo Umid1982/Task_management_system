@@ -30,24 +30,26 @@ class TaskService
 
     public function updateTask(string $title, string $description, string $status, string $priority, int $user_id, $task)
     {
-        $task->update([
-            'title' => $title,
-            'description' => $description,
-            'status' => $status,
-            'priority' => $priority,
-            'user_id' => $user_id
-        ]);
-        return $task;
+        if (auth()->user()->hasPermissionTo('update')) {
+            $task->update([
+                'title' => $title,
+                'description' => $description,
+                'status' => $status,
+                'priority' => $priority,
+                'user_id' => $user_id
+            ]);
+            return $task;
+        }
+        return false;
     }
 
     public function delete($task)
     {
-        try {
+        if (auth()->user()->hasPermissionTo('delete')) {
             $task->delete();
             return true;
-        } catch (\Exception $exception) {
-            return false;
         }
+        return false;
 
     }
 

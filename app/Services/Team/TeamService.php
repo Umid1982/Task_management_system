@@ -3,7 +3,6 @@
 namespace App\Services\Team;
 
 
-
 use App\Models\Team;
 use App\Models\TeamUser;
 use Exception;
@@ -23,37 +22,38 @@ class TeamService
         return Team::all();
     }
 
-    public function storeTeam(string $name,int $user_id)
+    public function storeTeam(string $name, int $user_id)
     {
         /** @var Team $team */
         $team = Team::query()->create([
-            'name'=>$name,
-            'user_id'=>$user_id,
+            'name' => $name,
+            'user_id' => $user_id,
         ]);
         return $team;
     }
 
-    public function updateTeam($name,$user_id,$team)
+    public function updateTeam($name, $user_id, $team)
     {
-        $team->update([
-            'name'=>$name,
-            'user_id'=>$user_id,
-        ]);
-        return $team;
+        if (\auth()->user()->hasPermissionTo('update')){
+            $team->update([
+                'name' => $name,
+                'user_id' => $user_id,
+            ]);
+            return $team;
+        }
+       return false;
     }
 
     public function delete(Team $team): bool
     {
-        try {
+        if (\auth()->user()->hasPermissionTo('delete')) {
             TeamUser::query()->where('team_id', '=', $team->id)->delete();
-
             $team->delete();
-
             return true;
-        } catch (Exception $exception) {
-            return false;
         }
+        return false;
     }
+
     public function createParticipant($storeRequest)
 
     {

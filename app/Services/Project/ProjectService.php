@@ -2,7 +2,11 @@
 
 namespace App\Services\Project;
 
+use App\Console\Constants\ResponseConstants\RoleResponseEnum;
 use App\Models\Project;
+use App\Models\User;
+use Exception;
+use Spatie\Permission\Models\Role;
 
 class ProjectService
 {
@@ -11,7 +15,7 @@ class ProjectService
         return Project::all();
     }
 
-    public function projectStore(string $title,string $description,string $status_date,int $team_id):Project
+    public function projectStore(string $title, string $description, string $status_date, int $team_id): Project
     {
         /** @var Project $project */
         $project = Project::query()->create([
@@ -24,23 +28,24 @@ class ProjectService
         return $project;
     }
 
-    public function projectUpdate($project,$data)
+    public function projectUpdate($project, $data)
     {
-        $project->update($data);
+        if (auth()->user()->hasPermissionTo('update')){
+            $project->update($data);
 
-        return $project;
+            return $project;
+        }
+       return false;
     }
 
     public function delete(Project $project)
     {
-        try {
+        if (auth()->user()->hasPermissionTo('delete')) {
             Project::query()->where('team_id', '=', $project->id)->delete();
-
             $project->delete();
-
             return true;
-        } catch (Exception $exception) {
-            return false;
         }
+        return false;
     }
+
 }

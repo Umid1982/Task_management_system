@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Console\Constants\ResponseConstants\UserResponseEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserProfileService;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+
 
 class ChangeUserPasswordController extends Controller
 {

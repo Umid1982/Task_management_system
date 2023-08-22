@@ -18,6 +18,8 @@ class TeamController extends Controller
         protected readonly TeamService $teamService
     )
     {
+//        $this->middleware('permission:view team')->only('index');
+//        $this->middleware('permission:view team')->only('show');
     }
 
     /**
@@ -40,6 +42,10 @@ class TeamController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        if (auth()->user()->hasPermission('create team')) {
+            abort(403);
+        }
+
         $team = $this->teamService->storeTeam(
             $request->get('name'),
             $request->get('user_id')
@@ -56,10 +62,16 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        return response([
-            'data' => TeamResource::make($team),
-            'message' => TeamResponseEnum::TEAM_SHOW,
-            'success' => true,
+        if (auth()->user()->hasPermissionTo('show')){
+            return response([
+                'data' => TeamResource::make($team),
+                'message' => TeamResponseEnum::TEAM_SHOW,
+                'success' => true,
+            ]);
+        }
+        return  response([
+            'message' => TeamResponseEnum::ERROR,
+            'success' => false,
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Http\Requests\Project\StoreRequest;
 use App\Http\Requests\Project\UpdateRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use App\Models\Team;
 use App\Services\Project\ProjectService;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -55,10 +56,16 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        if (auth()->user()->hasPermissionTo('show')){
+            return response([
+                'data' => ProjectResource::make($project),
+                'message' => ProjectResponseEnum::PROJECT_SHOW,
+                'success' => true
+            ]);
+        }
         return response([
-            'data' => ProjectResource::make($project),
-            'message' => ProjectResponseEnum::PROJECT_SHOW,
-            'success' => true
+            'message' => ProjectResponseEnum::ERROR,
+            'success' => false
         ]);
     }
 
