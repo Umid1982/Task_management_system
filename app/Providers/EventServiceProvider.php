@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use App\Events\SendComment;
+use App\Events\SendOverdue;
 use App\Events\SendPassword;
+use App\Events\SendWillOverdue;
 use App\Events\TaskSend;
 use App\Listeners\SendCommentToMail;
+use App\Listeners\SendOwerdueToMail;
 use App\Listeners\SendPasswordToEmail;
 use App\Listeners\SendTaskTitleToEmail;
+use App\Listeners\SendWillOwerdueToMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,7 +37,6 @@ class EventServiceProvider extends ServiceProvider
         SendComment::class => [
             SendCommentToMail::class,
         ],
-
 
     ];
 

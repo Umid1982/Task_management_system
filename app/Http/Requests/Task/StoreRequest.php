@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
+            'status' => ['nullable', 'string', 'max:255'],
             'priority' => ['required', 'string', 'max:255'],
             'expired_at'=>['required','date_format:Y-m-d H:i:s'],
             'user_id' => ['required', 'integer', Rule::exists('users', 'id')],

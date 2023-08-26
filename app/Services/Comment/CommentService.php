@@ -24,6 +24,8 @@ class CommentService
             'user_id' => auth()->user()->id,
             'task_id' => $task_id
         ]);
+        $user = User::query()->findOrFail($comment->user_id);
+        event(new SendComment($user->email, $comment->comment));
         return $comment;
     }
 

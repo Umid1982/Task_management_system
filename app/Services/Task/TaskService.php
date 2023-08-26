@@ -20,24 +20,24 @@ class TaskService
         return Task::all();
     }
 
-    public function storeTask($title, $description, $status, $priority,$expired_at ,$user_id)
+    public function storeTask($title, $description, $status, $priority, $expired_at, $user_id)
     {
         /** @var Task $task */
         $task = Task::query()->create([
             'title' => $title,
             'description' => $description,
-            'status' => $status,
+            'status' => $status ? $status : 'new',
             'priority' => $priority,
-            'expired_at'=>$expired_at,
+            'expired_at' => $expired_at,
             'user_id' => $user_id
         ]);
-        $user=User::query()->findOrFail($task->user_id);
+        $user = User::query()->findOrFail($task->user_id);
 
         event(new TaskSend($title, $user->email));
         return $task;
     }
 
-    public function updateTask(string $title, string $description, string $status, string $priority,$expired_at ,int $user_id, $task)
+    public function updateTask(string $title, string $description, string $status, string $priority, $expired_at, int $user_id, $task)
     {
         if (auth()->user()->hasPermissionTo('update')) {
             $task->update([
@@ -45,7 +45,7 @@ class TaskService
                 'description' => $description,
                 'status' => $status,
                 'priority' => $priority,
-                'expired_at'=>$expired_at,
+                'expired_at' => $expired_at,
                 'user_id' => $user_id
             ]);
             return $task;
