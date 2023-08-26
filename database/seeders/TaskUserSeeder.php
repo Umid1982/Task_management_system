@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\TaskUser;
+
 use Illuminate\Database\Seeder;
 
-class TeamSeeder extends Seeder
+class TaskUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Team::factory(15)->create();
+        TaskUser::factory(10)->create();
     }
 }

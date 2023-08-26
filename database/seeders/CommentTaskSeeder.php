@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
+use App\Models\CommentTask;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TeamSeeder extends Seeder
+class CommentTaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Team::factory(15)->create();
+        CommentTask::factory(15)->create();
     }
 }

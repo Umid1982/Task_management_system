@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Task;
+namespace App\Http\Requests\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
-            'priority' => ['required', 'string', 'max:255'],
-            'expired_at'=>['required','date_format:Y-m-d H:i:s'],
-            'user_id' => ['required', 'integer', Rule::exists('users', 'id')],
+            'comment'=>['nullable','string','max:255'],
+            'task_id'=>['nullable','integer',Rule::exists('tasks','id')],
         ];
     }
 }

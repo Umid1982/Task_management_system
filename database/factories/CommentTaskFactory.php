@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CommentTask>
  */
-class TaskFactory extends Factory
+class CommentTaskFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,12 +19,9 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title,
-            'description' => $this->faker->text,
-            'status' => $this->faker->title,
-            'priority' => $this->faker->title,
-            'expired_at' => $this->faker->dateTime(),
+            'comment' => $this->faker->text,
             'user_id' => User::query()->inRandomOrder()->first()->id,
+            'task_id' => Task::query()->inRandomOrder()->first()->id,
         ];
     }
 }

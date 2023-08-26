@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\SendPassword;
 use App\Mail\User\PasswordMail;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,7 +49,7 @@ class AuthService
             'password' => bcrypt($password)
         ]);
 
-        Mail::to($user['email'])->send(new PasswordMail($password));
+        event(new SendPassword( $user->email,$password));
 
         return $user;
     }

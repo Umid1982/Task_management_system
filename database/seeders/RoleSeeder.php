@@ -18,35 +18,35 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-//        $role = Role::create([
-//            'name' => 'admin',
-//            'guard_name' => 'web'
-//        ]);
-//        Role::query()->insert([
-//                [
-//                    'name' => RoleResponseEnum::MANAGER,
-//                    'guard_name' => 'web',
-//                ],
-//                [
-//                    'name' => RoleResponseEnum::EMPLOYEE,
-//                    'guard_name' => 'web',
-//                ],
-//            ]);
-//        $user = User::query()->where('name', '=', 'umid')->first();
-//        $user->assignRole($role->name);
+        $role = Role::create([
+            'name' => 'admin',
+            'guard_name' => 'web'
+        ]);
+        Role::query()->insert([
+                [
+                    'name' => RoleResponseEnum::MANAGER,
+                    'guard_name' => 'web',
+                ],
+                [
+                    'name' => RoleResponseEnum::EMPLOYEE,
+                    'guard_name' => 'web',
+                ],
+            ]);
+        $user = User::query()->where('name', '=', 'umid')->first();
+        $user->assignRole($role->name);
 
-//        $permissions = [
-//            PermissionResponseEnum::CREATE,
-//            PermissionResponseEnum::DELETE,
-//            PermissionResponseEnum::UPDATE,
-//            PermissionResponseEnum::SHOW,
-//        ];
-//
-//        foreach ($permissions as $permission){
-//            Permission::create([
-//                'name'=>$permission,
-//                'guard_name'=>'web'
-//            ]);
-//        }
+        $permissions = [
+            PermissionResponseEnum::CREATE,
+            PermissionResponseEnum::DELETE,
+            PermissionResponseEnum::UPDATE,
+            PermissionResponseEnum::SHOW,
+        ];
+
+        foreach ($permissions as $permission){
+            Permission::create([
+                'name'=>$permission,
+                'guard_name'=>'web'
+            ]);
+        }
     }
 }

@@ -27,6 +27,7 @@ class UpdateRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:255'],
             'priority' => ['nullable', 'string', 'max:255'],
+            'expired_at'=>['nullable','date_format:Y-m-d H:i:s'],
             'user_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
         ];
     }

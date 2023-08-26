@@ -41,6 +41,7 @@ class TaskController extends Controller
             $storeRequest->get('description'),
             $storeRequest->get('status'),
             $storeRequest->get('priority'),
+            $storeRequest->get('expired_at'),
             $storeRequest->get('user_id'),
         );
 
@@ -80,6 +81,7 @@ class TaskController extends Controller
             $updateRequest->get('description'),
             $updateRequest->get('status'),
             $updateRequest->get('priority'),
+            $updateRequest->get('expired_at'),
             $updateRequest->get('user_id'),
             $task
         );
@@ -115,7 +117,7 @@ class TaskController extends Controller
     {
         $data = $this->taskService->createTaskUsers(
             $storerequest->get('task_id'),
-            $storerequest->get('user_id')
+            $storerequest->get('user_id'),
         );
         return response([
             'data' => TaskUserResource::make($data->load('task')->load('user')),

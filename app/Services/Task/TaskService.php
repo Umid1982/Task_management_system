@@ -2,8 +2,13 @@
 
 namespace App\Services\Task;
 
+use App\Events\TaskSend;
+use App\Mail\User\PasswordMail;
+use App\Mail\User\TaskSendMail;
 use App\Models\Task;
 use App\Models\TaskUser;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class TaskService
 {
@@ -15,7 +20,7 @@ class TaskService
         return Task::all();
     }
 
-    public function storeTask($title, $description, $status, $priority, $user_id)
+    public function storeTask($title, $description, $status, $priority,$expired_at ,$user_id)
     {
         /** @var Task $task */
         $task = Task::query()->create([
@@ -23,12 +28,16 @@ class TaskService
             'description' => $description,
             'status' => $status,
             'priority' => $priority,
+            'expired_at'=>$expired_at,
             'user_id' => $user_id
         ]);
+        $user=User::query()->findOrFail($task->user_id);
+
+        event(new TaskSend($title, $user->email));
         return $task;
     }
 
-    public function updateTask(string $title, string $description, string $status, string $priority, int $user_id, $task)
+    public function updateTask(string $title, string $description, string $status, string $priority,$expired_at ,int $user_id, $task)
     {
         if (auth()->user()->hasPermissionTo('update')) {
             $task->update([
@@ -36,6 +45,7 @@ class TaskService
                 'description' => $description,
                 'status' => $status,
                 'priority' => $priority,
+                'expired_at'=>$expired_at,
                 'user_id' => $user_id
             ]);
             return $task;
@@ -58,7 +68,7 @@ class TaskService
         /** @var TaskUser $taskUser */
         $taskUser = TaskUser::query()->create([
             'task_id' => $task_id,
-            'user_id' => $user_id
+            'user_id' => $user_id,
         ]);
         return $taskUser;
     }

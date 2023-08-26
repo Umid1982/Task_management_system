@@ -17,10 +17,9 @@ class TeamFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::query()->inRandomOrder()->first();
         return [
             'name'=>$this->faker->name,
-            'user_id'=>$user->id,
+            'user_id'=>User::query()->inRandomOrder()->first()->id,
         ];
     }
 }

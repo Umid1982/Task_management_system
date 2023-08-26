@@ -61,4 +61,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return $this->belongsToMany(Task::class, 'task_users', 'user_id', 'task_id');
     }
 
+    public function taskComments()
+    {
+        return $this->hasMany(CommentTask::class);
+    }
 }
