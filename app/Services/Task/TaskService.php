@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Activitylog\Models\Activity;
 
 class TaskService
 {
@@ -34,6 +35,11 @@ class TaskService
         $user = User::query()->findOrFail($task->user_id);
 
         event(new TaskSend($title, $user->email));
+
+        /** @var Activity  $userAuth */
+        $userAuth = auth()->user();
+        activity($userAuth->email)->log('Task create ');
+
         return $task;
     }
 
@@ -48,6 +54,11 @@ class TaskService
                 'expired_at' => $expired_at,
                 'user_id' => $user_id
             ]);
+
+            /** @var Activity  $userAuth */
+            $userAuth = auth()->user();
+            activity($userAuth->email)->log('Task update ');
+
             return $task;
         }
         return false;
@@ -57,6 +68,11 @@ class TaskService
     {
         if (auth()->user()->hasPermissionTo('delete')) {
             $task->delete();
+
+            /** @var Activity  $userAuth */
+            $userAuth = auth()->user();
+            activity($userAuth->email)->log('Task delete ');
+
             return true;
         }
         return false;

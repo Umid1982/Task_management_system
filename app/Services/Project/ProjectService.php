@@ -6,6 +6,7 @@ use App\Console\Constants\ResponseConstants\RoleResponseEnum;
 use App\Models\Project;
 use App\Models\User;
 use Exception;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 
 class ProjectService
@@ -25,6 +26,10 @@ class ProjectService
             'team_id' => $team_id
         ]);
 
+        /** @var Activity  $userAuth */
+        $userAuth = auth()->user();
+        activity($userAuth->email)->log('Project create ');
+
         return $project;
     }
 
@@ -32,6 +37,10 @@ class ProjectService
     {
         if (auth()->user()->hasPermissionTo('update')){
             $project->update($data);
+
+            /** @var Activity  $userAuth */
+            $userAuth = auth()->user();
+            activity($userAuth->email)->log('Project update ');
 
             return $project;
         }
@@ -43,6 +52,11 @@ class ProjectService
         if (auth()->user()->hasPermissionTo('delete')) {
             Project::query()->where('team_id', '=', $project->id)->delete();
             $project->delete();
+
+            /** @var Activity  $userAuth */
+            $userAuth = auth()->user();
+            activity($userAuth->email)->log('Project delete ');
+
             return true;
         }
         return false;

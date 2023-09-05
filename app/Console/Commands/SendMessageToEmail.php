@@ -39,7 +39,6 @@ class SendMessageToEmail extends Command
         $now = now()->timestamp;
         foreach ($tasks as $task) {
             $expiredAt = strtotime($task->expired_at);
-
             if ($now > $expiredAt && $task->status != StatusResponseEnum::FINISHED) {
                 $user = User::query()->where('id', '=', $task->user_id)->first();
                 Mail::to($user->email)->send(new UserSendMessageMail($taskOverdue));

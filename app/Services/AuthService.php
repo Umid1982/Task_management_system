@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 
 class AuthService
 {
@@ -31,7 +32,9 @@ class AuthService
             if (is_null($user->email_verified_at)) {
                 $user->update(['email_verified_at' => now()]);
             }
-
+            /** @var Activity  $userAuth */
+            $userAuth = auth()->user();
+            activity($userAuth->email)->log('user logged in');
             return auth()->user()->createToken('auth-token')->plainTextToken;
         }
 
@@ -49,12 +52,12 @@ class AuthService
             'password' => bcrypt($password)
         ]);
 
-        event(new SendPassword( $user->email,$password));
+        event(new SendPassword($user->email, $password));
 
         return $user;
     }
 
-    public function  forgotPassword(string $email): User
+    public function forgotPassword(string $email): User
     {
         /** @var User $user */
         $password = Str::random(8);
