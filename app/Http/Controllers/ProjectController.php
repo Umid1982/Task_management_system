@@ -41,9 +41,9 @@ class ProjectController extends Controller
             $storeRequest->get('title'),
             $storeRequest->get('description'),
             $storeRequest->get('status_date'),
+            $storeRequest->file('file'),
             $storeRequest->get('team_id')
         );
-
         return response([
             'data' => ProjectResource::make($project),
             'message' => ProjectResponseEnum::PROJECT_CREATE,
@@ -75,8 +75,14 @@ class ProjectController extends Controller
      */
     public function update(UpdateRequest $request, Project $project)
     {
-        $data = $request->validated();
-        $projectUpdate = $this->projectService->projectUpdate($project, $data);
+        $projectUpdate = $this->projectService->projectUpdate(
+            $request->get('title'),
+            $request->get('description'),
+            $request->get('status_date'),
+            $request->file('file'),
+            $request->get('team_id'),
+            $project
+        );
         return response([
             'data' => ProjectResource::make($projectUpdate),
             'message' => ProjectResponseEnum::PROJECT_UPDATED,

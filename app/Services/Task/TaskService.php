@@ -8,6 +8,7 @@ use App\Mail\User\TaskSendMail;
 use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
+use App\Models\UserTask;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Activitylog\Models\Activity;
 
@@ -36,7 +37,7 @@ class TaskService
 
         event(new TaskSend($title, $user->email));
 
-        /** @var Activity  $userAuth */
+        /** @var Activity $userAuth */
         $userAuth = auth()->user();
         activity($userAuth->email)->log('Task create ');
 
@@ -55,7 +56,7 @@ class TaskService
                 'user_id' => $user_id
             ]);
 
-            /** @var Activity  $userAuth */
+            /** @var Activity $userAuth */
             $userAuth = auth()->user();
             activity($userAuth->email)->log('Task update ');
 
@@ -69,7 +70,7 @@ class TaskService
         if (auth()->user()->hasPermissionTo('delete')) {
             $task->delete();
 
-            /** @var Activity  $userAuth */
+            /** @var Activity $userAuth */
             $userAuth = auth()->user();
             activity($userAuth->email)->log('Task delete ');
 
@@ -87,5 +88,16 @@ class TaskService
             'user_id' => $user_id,
         ]);
         return $taskUser;
+    }
+
+    public function userTaskTime(int $user_id, int $task_id, $start_time, $end_time)
+    {
+        $userTime = UserTask::query()->create([
+            'user_id' => $user_id,
+            'task_id' => $task_id,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+        ]);
+        return $userTime;
     }
 }

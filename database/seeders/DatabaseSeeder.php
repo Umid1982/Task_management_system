@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 //            RoleSeeder::class,
 //            CommentTaskSeeder::class,
 //        TaskUserSeeder::class,
+        UserTaskSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

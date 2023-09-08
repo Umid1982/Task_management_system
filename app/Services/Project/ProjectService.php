@@ -16,8 +16,12 @@ class ProjectService
         return Project::all();
     }
 
-    public function projectStore(string $title, string $description, string $status_date, int $team_id): Project
+    public function projectStore(string $title, string $description, string $status_date, $file, int $team_id): Project
     {
+        /** @var Activity $userAuth */
+        $userAuth = auth()->user();
+        activity($userAuth->email)->log('Project create ');
+
         /** @var Project $project */
         $project = Project::query()->create([
             'title' => $title,
@@ -26,25 +30,31 @@ class ProjectService
             'team_id' => $team_id
         ]);
 
-        /** @var Activity  $userAuth */
-        $userAuth = auth()->user();
-        activity($userAuth->email)->log('Project create ');
+        if ($file) {
+            $project->addMedia($file)->toMediaCollection('file');
+        }
 
         return $project;
     }
 
-    public function projectUpdate($project, $data)
+    public function projectUpdate(string $title, string $description, string $status_date, $file, int $team_id,$project)
     {
-        if (auth()->user()->hasPermissionTo('update')){
-            $project->update($data);
+        if (auth()->user()->hasPermissionTo('update')) {
+            $project->update([
+                'title' => $title,
+                'description' => $description,
+                'status_date' => $status_date,
+                'team_id' => $team_id
+            ]);
+            $project->clearMediaCollection('file');
+            $project->addMedia($file)->toMediaCollection('file');
 
-            /** @var Activity  $userAuth */
+            /** @var Activity $userAuth */
             $userAuth = auth()->user();
             activity($userAuth->email)->log('Project update ');
-
             return $project;
         }
-       return false;
+        return false;
     }
 
     public function delete(Project $project)
@@ -53,7 +63,7 @@ class ProjectService
             Project::query()->where('team_id', '=', $project->id)->delete();
             $project->delete();
 
-            /** @var Activity  $userAuth */
+            /** @var Activity $userAuth */
             $userAuth = auth()->user();
             activity($userAuth->email)->log('Project delete ');
 

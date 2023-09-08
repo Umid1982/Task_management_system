@@ -24,6 +24,11 @@ class Task extends Model implements MustVerifyEmail
         return $this->belongsToMany(User::class, 'task_users', 'task_id', 'user_id');
     }
 
+    public function userTime()
+    {
+        return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
+    }
+
     public function hasVerifiedEmail()
     {
         // TODO: Implement hasVerifiedEmail() method.

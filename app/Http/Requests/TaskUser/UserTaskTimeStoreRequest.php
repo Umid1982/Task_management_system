@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\TaskUser;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class UserTaskTimeStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,10 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'status_date' => ['required', 'string', 'max:255'],
-            'file' => 'required|file|mimes:jpg,jpeg,png,doc,docx,mp4,mov,ogg,xlsx|max:10240',
-            'team_id' => ['required', 'integer'],
+            'user_id'=>['required','integer', Rule::exists('users', 'id')],
+            'task_id'=>['required','integer', Rule::exists('tasks', 'id')],
+            'start_time'=>['required','date_format:Y-m-d H:i:s'],
+            'end_time'=>['required','date_format:Y-m-d H:i:s'],
         ];
     }
 }

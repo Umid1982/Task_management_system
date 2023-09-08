@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
         Route::resource('comments', CommentTaskController::class)->parameters(['comments' =>'commentTask']);
         //TASK CRUD
         Route::post('task_users', [TaskController::class, 'taskUsers']);
+        Route::post('user_task_time',[TaskController::class,'userTaskTime']);
         Route::resource('tasks', TaskController::class);
 
         Route::get('statics_project_and_task', StaticsProjectTaskController::class);

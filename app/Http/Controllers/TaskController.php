@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Console\Constants\ResponseConstants\TaskResponseEnum;
+use App\Console\Constants\ResponseConstants\UserResponseEnum;
 use App\Http\Requests\Task\UpdateRequest;
 use App\Http\Requests\TaskUser\StoreRequest;
+use App\Http\Requests\TaskUser\UserTaskTimeStoreRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TaskUserResource;
+use App\Http\Resources\UserTaskTimeResource;
 use App\Models\Task;
 use App\Services\Task\TaskService;
 use Illuminate\Http\Request;
@@ -57,7 +60,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        if (auth()->user()->hasPermissionTo('show')){
+        if (auth()->user()->hasPermissionTo('show')) {
             return response([
                 'data' => TaskResource::make($task),
                 'message' => TaskResponseEnum::TASK_SHOW,
@@ -123,6 +126,21 @@ class TaskController extends Controller
             'data' => TaskUserResource::make($data->load('task')->load('user')),
             'message' => TaskResponseEnum::TASK_USER_CREATE,
             'success' => true
+        ]);
+    }
+
+    public function userTaskTime(UserTaskTimeStoreRequest $request)
+    {
+        $data = $this->taskService->userTaskTime(
+            $request->get('user_id'),
+            $request->get('task_id'),
+            $request->get('start_time'),
+            $request->get('end_time'),
+        );
+        return response([
+            'data' => UserTaskTimeResource::make($data->load('user')->load('task')),
+            'message' => UserResponseEnum::USER_TASK,
+            'success' => true,
         ]);
     }
 }

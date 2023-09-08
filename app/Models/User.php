@@ -15,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasRoles , LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasRoles, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name','email']);
+            ->logOnly(['name', 'email']);
         // Chain fluent methods for configuration options
     }
 
@@ -62,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function userTeams()
     {
-        return $this->hasMany(Team::class,'user_id','id');
+        return $this->hasMany(Team::class, 'user_id', 'id');
     }
 
     public function tasks()
@@ -73,5 +73,10 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     public function taskComments()
     {
         return $this->hasMany(CommentTask::class);
+    }
+
+    public function taskTime()
+    {
+        return $this->belongsToMany(Task::class, 'user_tasks', 'user_id', 'task_id');
     }
 }
