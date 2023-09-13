@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Console\Constants\ResponseConstants\TaskResponseEnum;
 use App\Console\Constants\ResponseConstants\UserResponseEnum;
+use App\Http\Requests\Task\TaskDependenciesRequest;
 use App\Http\Requests\Task\UpdateRequest;
 use App\Http\Requests\TaskUser\StoreRequest;
 use App\Http\Requests\TaskUser\UserTaskTimeStoreRequest;
+use App\Http\Resources\TaskChildrenResource;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TaskUserResource;
 use App\Http\Resources\UserTaskTimeResource;
@@ -143,4 +145,21 @@ class TaskController extends Controller
             'success' => true,
         ]);
     }
+
+    public function taskDependencies(TaskDependenciesRequest $request, Task $task)
+    {
+        $data = $this->taskService->dependencie(
+            $request->get('status'),
+            $task
+        );
+
+        return response([
+            'data' => TaskChildrenResource::make($data->load('children')),
+            'message' => TaskResponseEnum::TASK_CHILDREN,
+            'success' => true,
+        ]);
+
+    }
+
+
 }

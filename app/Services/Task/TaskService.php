@@ -3,13 +3,17 @@
 namespace App\Services\Task;
 
 use App\Events\TaskSend;
+use App\Http\Resources\TaskResource;
 use App\Mail\User\PasswordMail;
 use App\Mail\User\TaskSendMail;
 use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
 use App\Models\UserTask;
+use Cassandra\Exception\ValidationException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use mysql_xdevapi\Exception;
 use Spatie\Activitylog\Models\Activity;
 
 class TaskService
@@ -99,5 +103,21 @@ class TaskService
             'end_time' => $end_time,
         ]);
         return $userTime;
+    }
+
+    public function dependencie(string $status, Task $task)
+    {
+
+        $task->load('children');
+
+        foreach ($task->children as $child) {
+            if ($child->status != 'finish') {
+                throw new Exception('not all dependent tasks are finished');
+            }
+        }
+
+        return $task->update([
+            'status' => $status,
+        ]);
     }
 }

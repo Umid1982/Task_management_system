@@ -18,8 +18,7 @@ class TeamController extends Controller
         protected readonly TeamService $teamService
     )
     {
-//        $this->middleware('permission:view team')->only('index');
-//        $this->middleware('permission:view team')->only('show');
+
     }
 
     /**

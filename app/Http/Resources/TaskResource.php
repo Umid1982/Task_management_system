@@ -23,6 +23,7 @@ class TaskResource extends JsonResource
             'priority'=>$this->priority,
             'expired_at' => $this['expired_at'],
             'user_id'=>$this->user_id,
+            'parent_id'=>$this->parent_id,
         ];
     }
 }

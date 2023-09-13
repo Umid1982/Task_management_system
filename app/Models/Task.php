@@ -17,6 +17,7 @@ class Task extends Model implements MustVerifyEmail
         'priority',
         'expired_at',
         'user_id',
+        'parent_id',
     ];
 
     public function users()
@@ -27,6 +28,11 @@ class Task extends Model implements MustVerifyEmail
     public function userTime()
     {
         return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Task::class, 'parent_id', 'id');
     }
 
     public function hasVerifiedEmail()
